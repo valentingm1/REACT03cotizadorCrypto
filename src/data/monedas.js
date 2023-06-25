@@ -1,12 +1,13 @@
 const monedas = 
 [
-    {id:"USD", nombre:"USA Dollar1"},
+    {id:"USD", nombre:"USA Dollar"},
 
-    {id:"EUR", nombre:"USA Dollar2"},
+    {id:"EUR", nombre:"Euro"},
 
-    {id:"USD3", nombre:"USA Dollar3"},
+    {id:"ARS", nombre:"Argentina Peso"},
 
-    {id:"USD4", nombre:"USA Dollar4"},
+    {id:"UYU", nombre:"Uruguay Peso"},
+
+    {id:"JPY", nombre:"Japan Yen"},
 ]
-
-export default monedas;
+export {monedas}  

@@ -1,7 +1,8 @@
 import styled from "@emotion/styled"
 import { useEffect, useState } from "react"
 import useSelectCurrency from "../hooks/useSelectCurrency"
-import {monedas} from "../data/monedas"
+import { monedas } from "../data/monedas"
+import Error from "./Error"
 
 const InputSubmit = styled.input`
 background-color: #1b962e;
@@ -25,7 +26,15 @@ margin-top: 30px;
 
 
 
-const Form = () => {
+const Form = ({setMonedas}) => {
+
+    const [criptos,setCripto] = useState([])
+
+    const [moneda, SelectCurrency] = useSelectCurrency("Eligí tu moneda", monedas)
+
+    const [criptomoneda, SelectCripto] = useSelectCurrency("Eligí tu Criptomoneda", criptos)
+
+    const [error, setError] = useState(false)
 
     useEffect(() => {
         const consultarAPI = async () => {
@@ -33,7 +42,7 @@ const Form = () => {
             const respuesta = await (fetch(url))
             const resultado = await respuesta.json()
 
-            const arrayCryptos = resultado.Data.map(cripto => {
+            const arrayCriptos = resultado.Data.map(cripto => {
                 const objeto = {
                     id: cripto.CoinInfo.Name,
                     nombre: cripto.CoinInfo.FullName
@@ -41,21 +50,38 @@ const Form = () => {
                 return objeto
             })
 
+            setCripto(arrayCriptos)
+
 
         }
         consultarAPI();
     }, [])
     
+    const handleSubmit = e => {
+        e.preventDefault()
+        
+        if([moneda,criptomoneda].includes("")){
+            setError(true)
+            return
+        }
+            setError(false)
+        setMonedas({
+            moneda,criptomoneda
+        })
 
-    const [moneda, SelectCurrency] = useSelectCurrency("Elige tu moneda", monedas)
-
+        
+    }
 
   return (
-    <form action="">
+    <>
+    {error && <Error>Todos los campos son obligatorios</Error>}
+    <form onSubmit={handleSubmit}>
         <SelectCurrency/>
-        {moneda}
+        <SelectCripto/>
+
         <InputSubmit type="submit" value="Cotizar" />
     </form>
+    </>
   )
 }
 
